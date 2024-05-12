@@ -61,11 +61,7 @@ public class V2rayController {
         }
         start_intent.putExtra("COMMAND", AppConfigs.V2RAY_SERVICE_COMMANDS.START_SERVICE);
         start_intent.putExtra("V2RAY_CONFIG", AppConfigs.V2RAY_CONFIG);
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.N_MR1) {
-            context.startForegroundService(start_intent);
-        } else {
-            context.startService(start_intent);
-        }
+        context.startService(start_intent);
     }
 
     public static void StopV2ray(final Context context) {
