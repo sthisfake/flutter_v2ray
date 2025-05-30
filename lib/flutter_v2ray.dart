@@ -29,9 +29,14 @@ class FlutterV2ray {
   }
 
   /// You must initialize V2Ray before using it.
-  Future<void> initializeV2Ray() async {
+  Future<void> initializeV2Ray({
+    String notificationIconResourceType = "mipmap",
+    String notificationIconResourceName = "ic_launcher",
+  }) async {
     await FlutterV2rayPlatform.instance.initializeV2Ray(
       onStatusChanged: onStatusChanged,
+      notificationIconResourceType: notificationIconResourceType,
+      notificationIconResourceName: notificationIconResourceName,
     );
   }
 
@@ -70,6 +75,7 @@ class FlutterV2ray {
     List<String>? blockedApps,
     List<String>? bypassSubnets,
     bool proxyOnly = false,
+    String notificationDisconnectButtonName = "DISCONNECT",
   }) async {
     try {
       if (jsonDecode(config) == null) {
@@ -85,6 +91,7 @@ class FlutterV2ray {
       blockedApps: blockedApps,
       proxyOnly: proxyOnly,
       bypassSubnets: bypassSubnets,
+      notificationDisconnectButtonName: notificationDisconnectButtonName,
     );
   }
 
@@ -94,7 +101,9 @@ class FlutterV2ray {
   }
 
   /// This method returns the real server delay of the configuration.
-  Future<int> getServerDelay({required String config}) async {
+  Future<int> getServerDelay(
+      {required String config,
+      String url = 'https://google.com/generate_204'}) async {
     try {
       if (jsonDecode(config) == null) {
         throw ArgumentError('The provided string is not valid JSON');
@@ -102,12 +111,14 @@ class FlutterV2ray {
     } catch (_) {
       throw ArgumentError('The provided string is not valid JSON');
     }
-    return await FlutterV2rayPlatform.instance.getServerDelay(config: config);
+    return await FlutterV2rayPlatform.instance
+        .getServerDelay(config: config, url: url);
   }
 
   /// This method returns the connected server delay.
-  Future<int> getConnectedServerDelay() async {
-    return await FlutterV2rayPlatform.instance.getConnectedServerDelay();
+  Future<int> getConnectedServerDelay(
+      {String url = 'https://google.com/generate_204'}) async {
+    return await FlutterV2rayPlatform.instance.getConnectedServerDelay(url);
   }
 
   // This method returns the V2Ray Core version.

@@ -1,3 +1,21 @@
+## 1.0.10
+
+* update xray core version to 25.3.6
+
+## 1.0.9
+
+* add disconnect button (notificationDisconnectButtonName)
+* fix requestPermission
+* fix notification bugs  (android 13 and higher)
+
+## 1.0.8
+
+* fix registerReceiver error
+* fix build for API 34 ( check IntentFilter V2RAY_CONNECTION_INFO )
+* change type of usage statistic
+* fix deprecated apis
+* update v2ray core to 1.8.17
+
 ## 1.0.7
 
 * fix v2rayBroadCastReceiver null exception

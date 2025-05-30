@@ -3,6 +3,8 @@ package com.github.blueboytm.flutter_v2ray.v2ray.utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.github.blueboytm.flutter_v2ray.v2ray.core.V2rayCoreManager;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -12,9 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Locale;
-
-import com.github.blueboytm.flutter_v2ray.v2ray.core.V2rayCoreManager;
 
 public class Utilities {
 
@@ -60,18 +59,6 @@ public class Utilities {
         else return value + "";
     }
 
-    public static String parseTraffic(final double bytes, final boolean inBits, final boolean isMomentary) {
-        double value = inBits ? bytes * 8 : bytes;
-        if (value < AppConfigs.KILO_BYTE) {
-            return String.format(Locale.getDefault(), "%.1f " + (inBits ? "b" : "B") + (isMomentary ? "/s" : ""), value);
-        } else if (value < AppConfigs.MEGA_BYTE) {
-            return String.format(Locale.getDefault(), "%.1f K" + (inBits ? "b" : "B") + (isMomentary ? "/s" : ""), value / AppConfigs.KILO_BYTE);
-        } else if (value < AppConfigs.GIGA_BYTE) {
-            return String.format(Locale.getDefault(), "%.1f M" + (inBits ? "b" : "B") + (isMomentary ? "/s" : ""), value / AppConfigs.MEGA_BYTE);
-        } else {
-            return String.format(Locale.getDefault(), "%.2f G" + (inBits ? "b" : "B") + (isMomentary ? "/s" : ""), value / AppConfigs.GIGA_BYTE);
-        }
-    }
 
     public static V2rayConfig parseV2rayJsonFile(final String remark, String config, final ArrayList<String> blockedApplication, final ArrayList<String> bypass_subnets) {
         final V2rayConfig v2rayConfig = new V2rayConfig();
@@ -80,6 +67,7 @@ public class Utilities {
         v2rayConfig.BYPASS_SUBNETS = bypass_subnets;
         v2rayConfig.APPLICATION_ICON = AppConfigs.APPLICATION_ICON;
         v2rayConfig.APPLICATION_NAME = AppConfigs.APPLICATION_NAME;
+        v2rayConfig.NOTIFICATION_DISCONNECT_BUTTON_NAME = AppConfigs.NOTIFICATION_DISCONNECT_BUTTON_NAME;
         try {
             JSONObject config_json = new JSONObject(config);
             try {

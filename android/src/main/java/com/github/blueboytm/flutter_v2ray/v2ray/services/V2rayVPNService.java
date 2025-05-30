@@ -9,12 +9,6 @@ import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import com.github.blueboytm.flutter_v2ray.v2ray.core.V2rayCoreManager;
 import com.github.blueboytm.flutter_v2ray.v2ray.interfaces.V2rayServicesListener;
 import com.github.blueboytm.flutter_v2ray.v2ray.utils.AppConfigs;
@@ -23,6 +17,12 @@ import com.github.blueboytm.flutter_v2ray.v2ray.utils.V2rayConfig;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class V2rayVPNService extends VpnService implements V2rayServicesListener {
     private ParcelFileDescriptor mInterface;
@@ -40,41 +40,33 @@ public class V2rayVPNService extends VpnService implements V2rayServicesListener
 public int onStartCommand(Intent intent, int flags, int startId) {
     if (intent != null) {
         AppConfigs.V2RAY_SERVICE_COMMANDS startCommand = (AppConfigs.V2RAY_SERVICE_COMMANDS) intent.getSerializableExtra("COMMAND");
-        if (startCommand != null) {
-            if (startCommand.equals(AppConfigs.V2RAY_SERVICE_COMMANDS.START_SERVICE)) {
-                v2rayConfig = (V2rayConfig) intent.getSerializableExtra("V2RAY_CONFIG");
-                if (v2rayConfig == null) {
-                    this.onDestroy();
-                }
-                if (V2rayCoreManager.getInstance().isV2rayCoreRunning()) {
-                    V2rayCoreManager.getInstance().stopCore();
-                }
-                if (V2rayCoreManager.getInstance().startCore(v2rayConfig)) {
-                    Log.e(V2rayProxyOnlyService.class.getSimpleName(), "onStartCommand success => v2ray core started.");
-                } else {
-                    this.onDestroy();
-                }
-            } else if (startCommand.equals(AppConfigs.V2RAY_SERVICE_COMMANDS.STOP_SERVICE)) {
+        if (startCommand.equals(AppConfigs.V2RAY_SERVICE_COMMANDS.START_SERVICE)) {
+            v2rayConfig = (V2rayConfig) intent.getSerializableExtra("V2RAY_CONFIG");
+            if (v2rayConfig == null) {
+                this.onDestroy();
+            }
+            if (V2rayCoreManager.getInstance().isV2rayCoreRunning()) {
                 V2rayCoreManager.getInstance().stopCore();
-            } else if (startCommand.equals(AppConfigs.V2RAY_SERVICE_COMMANDS.MEASURE_DELAY)) {
-                new Thread(() -> {
-                    Intent sendB = new Intent("CONNECTED_V2RAY_SERVER_DELAY");
-                    sendB.putExtra("DELAY", String.valueOf(V2rayCoreManager.getInstance().getConnectedV2rayServerDelay()));
-                    sendBroadcast(sendB);
-                }, "MEASURE_CONNECTED_V2RAY_SERVER_DELAY").start();
+            }
+            if (V2rayCoreManager.getInstance().startCore(v2rayConfig)) {
+                Log.e(V2rayProxyOnlyService.class.getSimpleName(), "onStartCommand success => v2ray core started.");
             } else {
                 this.onDestroy();
             }
+        } else if (startCommand.equals(AppConfigs.V2RAY_SERVICE_COMMANDS.STOP_SERVICE)) {
+            V2rayCoreManager.getInstance().stopCore();
+            AppConfigs.V2RAY_CONFIG = null;
+        } else if (startCommand.equals(AppConfigs.V2RAY_SERVICE_COMMANDS.MEASURE_DELAY)) {
+            new Thread(() -> {
+                Intent sendB = new Intent("CONNECTED_V2RAY_SERVER_DELAY");
+                sendB.putExtra("DELAY", String.valueOf(V2rayCoreManager.getInstance().getConnectedV2rayServerDelay()));
+                sendBroadcast(sendB);
+            }, "MEASURE_CONNECTED_V2RAY_SERVER_DELAY").start();
         } else {
-            // Handle the case when the COMMAND extra is null
             this.onDestroy();
         }
-    } else {
-        // Handle the case when the intent is null
-        this.onDestroy();
+        return START_STICKY;
     }
-    return START_STICKY;
-}
 
     private void stopAllProcess() {
         stopForeground(true);
@@ -107,9 +99,9 @@ public int onStartCommand(Intent intent, int flags, int startId) {
         builder.setMtu(1500);
         builder.addAddress("26.26.26.1", 30);
 
-        if (v2rayConfig.BYPASS_SUBNETS == null || v2rayConfig.BYPASS_SUBNETS.size() <= 0) {
+        if (v2rayConfig.BYPASS_SUBNETS == null || v2rayConfig.BYPASS_SUBNETS.isEmpty()) {
             builder.addRoute("0.0.0.0", 0);
-        }else {
+        } else {
             for (String subnet : v2rayConfig.BYPASS_SUBNETS) {
                 String[] parts = subnet.split("/");
                 if (parts.length == 2) {

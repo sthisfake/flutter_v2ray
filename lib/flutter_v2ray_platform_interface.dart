@@ -30,6 +30,8 @@ abstract class FlutterV2rayPlatform extends PlatformInterface {
 
   Future<void> initializeV2Ray({
     required void Function(V2RayStatus status) onStatusChanged,
+    required String notificationIconResourceType,
+    required String notificationIconResourceName,
   }) {
     throw UnimplementedError('initializeV2Ray() has not been implemented.');
   }
@@ -37,6 +39,7 @@ abstract class FlutterV2rayPlatform extends PlatformInterface {
   Future<void> startV2Ray({
     required String remark,
     required String config,
+    required String notificationDisconnectButtonName,
     List<String>? blockedApps,
     List<String>? bypassSubnets,
     bool proxyOnly = false,
@@ -48,11 +51,11 @@ abstract class FlutterV2rayPlatform extends PlatformInterface {
     throw UnimplementedError('stopV2Ray() has not been implemented.');
   }
 
-  Future<int> getServerDelay({required String config}) {
+  Future<int> getServerDelay({required String config, required String url}) {
     throw UnimplementedError('getServerDelay() has not been implemented.');
   }
 
-  Future<int> getConnectedServerDelay() async {
+  Future<int> getConnectedServerDelay(String url) async {
     throw UnimplementedError(
       'getConnectedServerDelay() has not been implemented.',
     );

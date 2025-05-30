@@ -22,12 +22,9 @@
 
 
 ## Change logs
-### 1.0.7
+### 1.0.10
 
-* fix v2rayBroadCastReceiver null exception
-* fix #35: registerReceiver error
-* update libv2ray to 1.8.7
-* fix #43: Adding DNS servers to the VPN service
+* update xray core version to 25.3.6
 
 #### [see more](./CHANGELOG.md)
 
@@ -42,9 +39,9 @@
 
 | Platform  | Status    | Info |
 | --------- | --------- | ---- |
-| Android   | Done ✅   | Xray 1.8.7 |
-| IOS       | Soon ❎   | - |
-| Desktop   | Done ✅   | For purchase: [t.me/blueboy_tm](https://t.me/blueboy-tm) |
+| Android   | Done ✅   | Xray 25.3.6 |
+| IOS       | Done ✅   | For purchase: [t.me/blueboy_tm](https://t.me/blueboy_tm) |
+| Desktop   | Done ✅   | For purchase: [t.me/blueboy_tm](https://t.me/blueboy_tm) |
 
 <br>
 
