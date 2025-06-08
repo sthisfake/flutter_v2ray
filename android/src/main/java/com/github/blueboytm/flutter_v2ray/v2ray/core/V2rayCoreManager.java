@@ -300,7 +300,7 @@ public final class V2rayCoreManager {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, notificationChannelID)
                 .setSmallIcon(v2rayConfig.APPLICATION_ICON)
                 .setContentTitle(v2rayConfig.REMARK)
-                .addAction(0, v2rayConfig.NOTIFICATION_DISCONNECT_BUTTON_NAME, pendingIntent)
+                //.addAction(0, v2rayConfig.NOTIFICATION_DISCONNECT_BUTTON_NAME, pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setShowWhen(false)
                 .setOnlyAlertOnce(true)
